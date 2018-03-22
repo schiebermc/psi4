@@ -391,6 +391,7 @@ void DFJK::free_w_temps() {
     Q_temp_.clear();
 }
 void DFJK::preiterations() {
+    printf("df_ints_io_: %s\n", df_ints_io_.c_str());
     // DF requires constant sieve, must be static throughout object life
     if (!sieve_) {
         sieve_ = std::make_shared<ERISieve>(primary_, cutoff_);

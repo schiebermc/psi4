@@ -110,4 +110,11 @@ int symm_JK::max_nocc() const {
     }
     return max_nocc;
 }
+void symm_JK::set_df_ints_io(const std::string& val) { 
+
+    printf("here!\n");
+    df_ints_io_ = val; 
+    dfh_->set_df_ints_io(df_ints_io_);
+}
+
 }

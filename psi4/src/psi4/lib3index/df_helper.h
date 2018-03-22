@@ -138,6 +138,12 @@ class DF_Helper {
     void set_omega(double omega) { omega_ = omega; }
     size_t get_omega() { return omega_; }
 
+    ///  
+    ///What action to take for caching three-index integrals
+    ///@param val One of NONE, LOAD, or SAVE
+    ///
+    void set_df_ints_io(const std::string& val) { df_ints_io_ = val; }
+    
     /// Initialize the object
     void initialize();
     
@@ -409,6 +415,7 @@ class DF_Helper {
     void get_tensor_AO(std::string file, double* Mp, size_t size, size_t start);
 
     // => internal handlers for FILE IO <=
+    std::string df_ints_io_ = "NONE";
     std::map<std::string, std::tuple<std::string, std::string>> files_;
     std::map<std::string, std::tuple<size_t, size_t, size_t>> sizes_;
     std::map<std::string, std::tuple<size_t, size_t, size_t>> tsizes_;

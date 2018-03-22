@@ -978,7 +978,9 @@ class symm_JK : public JK {
 
     /// Common initialization
     void common_init();
-
+    
+    /// Cache action for three-index integrals
+    std::string df_ints_io_;
 
   public:
     // => Constructors < = //
@@ -1010,6 +1012,11 @@ class symm_JK : public JK {
      */
     void set_df_ints_num_threads(int val) { df_ints_num_threads_ = val; }
     
+    /**
+     * What action to take for caching three-index integrals
+     * @param val One of NONE, LOAD, or SAVE
+     */
+    void set_df_ints_io(const std::string& val); 
     
     // => Accessors <= //
 

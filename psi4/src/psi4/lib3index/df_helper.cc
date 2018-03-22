@@ -98,11 +98,9 @@ void DF_Helper::AO_filename_maker(size_t i) {
 
 std::string DF_Helper::start_filename(std::string start){
     
-    #include <cstdlib>
     std::string name = PSIOManager::shared_object()->get_default_path();
     name += start + "." + std::to_string(getpid());
-    name += "." + primary_->molecule()->name() + ".";
-    name += std::to_string(rand()) + "." +  ".dat";
+    name += "." + primary_->molecule()->name() + ".dat";
     return name;
 }
 
@@ -146,7 +144,7 @@ void DF_Helper::initialize() {
     if(debug_) {
         outfile->Printf("Entering DF_Helper::initialize\n");
     }
-    
+    printf("df_ints_io: %s\n", df_ints_io_.c_str()); 
     timer_on("DFH: initialize()");
 
     // have the algorithm specified before init
@@ -3016,6 +3014,10 @@ void DF_Helper::compute_K(std::vector<SharedMatrix> Cleft, std::vector<SharedMat
                           size_t block_size, std::vector<std::vector<double>> C_buffers, bool lr_symmetric) {
     size_t nao = nao_;
     size_t naux = naux_;
+        
+    if(lr_symmetric){
+        T2p = T1p;
+    } 
 
     for (size_t i = 0; i < K.size(); i++) {
         
@@ -3030,12 +3032,10 @@ void DF_Helper::compute_K(std::vector<SharedMatrix> Cleft, std::vector<SharedMat
         first_transform_pQq(nao, naux, nocc, bcount, block_size, Mp, T1p, Clp, C_buffers);
 
         // compute second tmp
-        if(lr_symmetric){
-            T2p = T1p;
-        } else {
+        if(!lr_symmetric) {
             first_transform_pQq(nao, naux, nocc, bcount, block_size, Mp, T2p, Crp, C_buffers);
-        }        
- 
+        }
+        
         // compute K 
         C_DGEMM('N', 'T', nao, nao, nocc * block_size, 1.0, T1p, nocc * block_size, T2p, 
                                     nocc * block_size, 1.0, Kp, nao);
